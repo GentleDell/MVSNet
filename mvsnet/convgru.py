@@ -18,13 +18,16 @@ def group_norm(input_tensor,
     # shapes and groups
     shape = tf.shape(x)
     N = shape[0]
-    C = x.get_shape()[1]
+    C = x.get_shape().as_list()[1]      #  modefied by zhantao deng @ 26-06-2019 -> change data type to int
     H = shape[2]
     W = shape[3]
     if channel_wise:
         G = max(1, C / group_channel)
     else:
         G = min(group, C)
+        
+#         added by zhantao deng @ 26-06-2019, float to int32            
+    G = int(G)
 
     # use layer normalization to simplify operations
     if G == 1:

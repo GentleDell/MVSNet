@@ -428,7 +428,7 @@ def inference_winner_take_all(images, cams, depth_num, depth_start, depth_end,
             depth = depth_start + d_idx * depth_interval
         temp_depth_image = tf.reshape(depth, [FLAGS.batch_size, 1, 1, 1])
         temp_depth_image = tf.tile(
-            temp_depth_image, [1, feature_shape[1], feature_shape[2], 1])
+            temp_depth_image, [1, int(feature_shape[1]), int(feature_shape[2]), 1])  # modified by zhantao deng @ 26-07-2019, float -> int
 
         # update the best
         update_flag_image = tf.cast(tf.less(max_prob_image, prob), dtype='float32')

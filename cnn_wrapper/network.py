@@ -124,7 +124,7 @@ class Network(object):
         assert args
         self.terminals = []
         for fed_layer in args:
-            if isinstance(fed_layer, basestring):
+            if isinstance(fed_layer, str):
                 try:
                     fed_layer = self.layers[fed_layer]
                 except KeyError:
@@ -227,14 +227,17 @@ class Network(object):
         x = tf.transpose(conv, [0, 3, 1, 2])
         shape = tf.shape(x)
         N = shape[0]
-        C = x.get_shape()[1]
+        C = x.get_shape().as_list()[1]      #  modefied by zhantao deng @ 26-06-2019 -> change data type to int
         H = shape[2]
         W = shape[3]
         if channel_wise:
             G = max(1, C / group_channel)
         else:
             G = min(group, C)
-
+        
+#         added by zhantao deng @ 26-06-2019, float to int32
+        G = int(G)  
+        
         # normalization 
         x = tf.reshape(x, [N, G, C // G, H, W])
         mean, var = tf.nn.moments(x, [2, 3, 4], keep_dims=True)
@@ -357,13 +360,16 @@ class Network(object):
         x = tf.transpose(deconv, [0, 3, 1, 2])
         shape = tf.shape(x)
         N = shape[0]
-        C = x.get_shape()[1]
+        C = x.get_shape().as_list()[1]      #  modefied by zhantao deng @ 26-06-2019 -> change data type to int
         H = shape[2]
         W = shape[3]
         if channel_wise:
             G = max(1, C / group_channel)
         else:
             G = min(group, C)
+            
+#         added by zhantao deng @ 26-06-2019, float to int32            
+        G = int(G)
 
         # normalization 
         x = tf.reshape(x, [N, G, C // G, H, W])

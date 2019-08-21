@@ -23,10 +23,10 @@ from model import *
 from loss import *
 
 # dataset parameters
-tf.app.flags.DEFINE_string('dense_folder', None, 
+tf.app.flags.DEFINE_string('dense_folder', '../scan9/scan9/', 
                            """Root path to dense folder.""")
 tf.app.flags.DEFINE_string('model_dir', 
-                           '/data/tf_model',
+                           '../models/tf_model/',
                            """Path to restore the model.""")
 tf.app.flags.DEFINE_integer('ckpt_step', 100000,
                             """ckpt step.""")
@@ -80,10 +80,10 @@ class MVSGenerator:
                 selected_view_num = int(len(data) / 2)
 
                 for view in range(min(self.view_num, selected_view_num)):
-                    image_file = file_io.FileIO(data[2 * view], mode='r')
-                    image = scipy.misc.imread(image_file, mode='RGB')
+                    image_file = file_io.FileIO(data[2 * view], mode='rb')      # all 'r' are changed to be 'rb' to load image data 
+                    image = scipy.misc.imread(image_file, mode='RGB')           # as binary for futher de/encoding, by zhantao deng@ 26-07-2019
                     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-                    cam_file = file_io.FileIO(data[2 * view + 1], mode='r')
+                    cam_file = file_io.FileIO(data[2 * view + 1], mode='rb')
                     cam = load_cam(cam_file, FLAGS.interval_scale)
                     if cam[1][3][2] == 0:
                         cam[1][3][2] = FLAGS.max_d
@@ -92,10 +92,10 @@ class MVSGenerator:
 
                 if selected_view_num < self.view_num:
                     for view in range(selected_view_num, self.view_num):
-                        image_file = file_io.FileIO(data[0], mode='r')
+                        image_file = file_io.FileIO(data[0], mode='rb')
                         image = scipy.misc.imread(image_file, mode='RGB')
                         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-                        cam_file = file_io.FileIO(data[1], mode='r')
+                        cam_file = file_io.FileIO(data[1], mode='rb')
                         cam = load_cam(cam_file, FLAGS.interval_scale)
                         images.append(image)
                         cams.append(cam)
