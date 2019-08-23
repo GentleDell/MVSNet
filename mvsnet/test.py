@@ -11,6 +11,7 @@ import time
 import sys
 import math
 import argparse
+import imageio
 import numpy as np
 
 import cv2
@@ -81,7 +82,7 @@ class MVSGenerator:
 
                 for view in range(min(self.view_num, selected_view_num)):
                     image_file = file_io.FileIO(data[2 * view], mode='rb')      # all 'r' are changed to be 'rb' to load image data 
-                    image = scipy.misc.imread(image_file, mode='RGB')           # as binary for futher de/encoding, by zhantao deng@ 26-07-2019
+                    image = imageio.imread(image_file, mode='RGB')           # as binary for futher de/encoding, by zhantao deng@ 26-07-2019
                     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
                     cam_file = file_io.FileIO(data[2 * view + 1], mode='rb')
                     cam = load_cam(cam_file, FLAGS.interval_scale)
@@ -93,7 +94,7 @@ class MVSGenerator:
                 if selected_view_num < self.view_num:
                     for view in range(selected_view_num, self.view_num):
                         image_file = file_io.FileIO(data[0], mode='rb')
-                        image = scipy.misc.imread(image_file, mode='RGB')
+                        image = imageio.imread(image_file, mode='RGB')
                         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
                         cam_file = file_io.FileIO(data[1], mode='rb')
                         cam = load_cam(cam_file, FLAGS.interval_scale)
