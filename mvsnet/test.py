@@ -256,8 +256,11 @@ def mvsnet_pipeline(mvs_list):
             write_pfm(init_depth_map_path, out_init_depth_image)
             write_pfm(prob_map_path, out_prob_map)
             out_ref_image = cv2.cvtColor(out_ref_image, cv2.COLOR_RGB2BGR)
-            image_file = file_io.FileIO(out_ref_image_path, mode='w')
-            imageio.imwrite(image_file, out_ref_image)
+            
+#            image_file = file_io.FileIO(out_ref_image_path, mode='w')
+            
+            cv2.imwrite(out_ref_image_path, out_ref_image)    # modified by zhantao deng. using cv2 because imwrite  
+                                                              # has been removed from scipy and imageio is inconvenient. 
             write_cam(out_ref_cam_path, out_ref_cam)
             total_step += 1
 
